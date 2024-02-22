@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[6]:
-
-
 import pandas as pd
 import numpy as np
 import tkinter as tk
@@ -15,15 +9,13 @@ columns = ['ФИО', 'Паспортные данные', 'СНИЛС', 'Сим�
            'Стоимость анализов', 'Карта оплаты']
 
 
-# In[10]:
-
-
 def delete_attribute(df, col):
     mask = []
     for data in df[col]:
         mask.append(' ')
     df[col] = mask
     return df
+
 
 def loc_gen_passport(df, col):
     passports = []
@@ -37,6 +29,7 @@ def loc_gen_passport(df, col):
     df[col] = passports
     return df
 
+
 def SNILS(df, col):
     sn = []
     for s in df[col]:
@@ -45,12 +38,14 @@ def SNILS(df, col):
     df[col] = sn
     return df
 
+
 def num_of_attributes(df, col):
     atributes = []
     for s in df[col]:
         atributes.append((s.count(',')+1))
     df[col] = atributes
     return df
+
 
 def psevdonim(df, col):
     names = []
@@ -70,6 +65,7 @@ def psevdonim(df, col):
     df[col] = names      
     return df
 
+
 def date_mask(df, col):
     mask = []
     for data in df[col]:
@@ -77,6 +73,7 @@ def date_mask(df, col):
         mask.append(date) 
     df[col] = mask
     return df
+
 
 def ma_cost(df, col, num_intervals=5):
     anon_col = []
@@ -90,6 +87,7 @@ def ma_cost(df, col, num_intervals=5):
     df[col] = anon_col
     return df
 
+
 def card_mask(df, col):
     cards = []
     for card in df[col]:
@@ -99,12 +97,8 @@ def card_mask(df, col):
     return df
 
 
-# In[11]:
-
-
 def anonymization(path):
     df = pd.read_excel(path)
-    
     delete_attribute(df, 'ФИО')
     loc_gen_passport(df, 'Паспортные данные')
     SNILS(df, 'СНИЛС')
@@ -115,7 +109,6 @@ def anonymization(path):
     date_mask(df, 'Дата получения анализов')
     ma_cost(df, 'Стоимость анализов')
     card_mask(df, 'Карта оплаты')
-    
     return df
 
 def k_anonymity(df, selected):
@@ -131,9 +124,6 @@ def k_anonymity(df, selected):
 def calculate_k_anonymity(df, columns, k):
     group_counts = df.groupby(columns).size().reset_index(name='count')
     return all(group_counts['count'] >= k)
-
-
-# In[12]:
 
 
 loaded_file_path = None 
@@ -164,6 +154,7 @@ def handle_attributes():
         #print(bad_k_values)
         #print(f"\nПроцент 'плохих' значений K-анонимности: {percentage_bad_k:.2f}%")
 
+
 def k_anon():
     selected_attributes = []
     for attribute, var in attribute_vars.items():
@@ -182,11 +173,8 @@ root.geometry("500x600")
 
 greeting_label = tk.Label(root, text="Добро пожаловать! Выберите квази-идентификаторы:", font=("Arial", 14))
 greeting_label.pack(pady=20)
-
 load_button = tk.Button(root, text="Загрузить файл", command=load_file, font=("Arial", 12), bg="lightblue")
 load_button.pack(pady=10)
-
-
 file_label = tk.Label(root, text="", font=("Arial", 12))
 file_label.pack(pady=10)
 
@@ -200,21 +188,7 @@ for attribute in columns:
 
 process_button = tk.Button(root, text="Обезличить и вычислить", command=handle_attributes, font=("Arial", 12), bg="green", fg="white")
 process_button.pack(pady=20)
-
 load_button2 = tk.Button(root, text="Вычислить k-anonymity", command=k_anon, font=("Arial", 12), bg="green", fg="white")
 load_button2.pack(pady=25)
 
 root.mainloop()
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
